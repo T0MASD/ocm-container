@@ -17,10 +17,14 @@ COPY utils/dockerfile_assets/platforms.sh /usr/local/bin/platform_convert
 # Use  Platform Conversion Tool to set google-cloud-sdk repo arch
 RUN platform_convert -i utils/dockerfile_assets/google-cloud-sdk.repo --x86_64 --aarch64
 
-# Add epel, google-cloud-sdk, hashicorp repos
+# Add google-cloud-sdk repo
+COPY utils/dockerfile_assets/google-cloud-sdk.repo /etc/yum.repos.d/
+# Use  Platform Conversion Tool to set google-cloud-sdk repo arch
+RUN platform_convert -i /etc/yum.repos.d/google-cloud-sdk.repo --x86_64 --aarch64
+
+# Add epel, hashicorp repos
 RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9 \
       && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
-      && yum-config-manager --add-repo utils/dockerfile_assets/google-cloud-sdk.repo \
       && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo \
 
 # Install packages
