@@ -25,7 +25,7 @@ RUN platform_convert -i /etc/yum.repos.d/google-cloud-sdk.repo --x86_64 --aarch6
 # Add epel, hashicorp repos
 RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9 \
       && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
-      && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo \
+      && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 
 # Install packages
 # These packages will end up in the final image
