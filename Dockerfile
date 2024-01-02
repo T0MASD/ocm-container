@@ -56,6 +56,7 @@ RUN microdnf --assumeyes --nodocs install \
       terraform \
       packer \
       && microdnf clean all \
+      && yum-config-manager --disable google-cloud-sdk hashicorp \
       && rm -rf /var/cache/yum
 
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git /root/.fzf \
