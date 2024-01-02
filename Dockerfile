@@ -2,9 +2,8 @@
 ARG BASE_IMAGE=registry.access.redhat.com/ubi9/ubi-minimal:9.1.0
 FROM ${BASE_IMAGE} as base-update
 
-RUN microdnf --assumeyes install yum-utils
-
-RUN microdnf --assumeyes --nodocs update \
+RUN microdnf --assumeyes install yum-utils \
+      && microdnf --assumeyes --nodocs update \
       && microdnf clean all \
       && rm -rf /var/cache/yum
 
