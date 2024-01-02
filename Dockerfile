@@ -12,18 +12,16 @@ FROM base-update as dnf-install
 # OCM backplane console port to map
 ENV OCM_BACKPLANE_CONSOLE_PORT 9999
 
-# Adds Platform Conversion Tool for arm64/x86_64 compatibility
+# Add Platform Conversion Tool for arm64/x86_64 compatibility
 COPY utils/dockerfile_assets/platforms.sh /usr/local/bin/platform_convert
+# Use  Platform Conversion Tool to set google-cloud-sdk repo arch
+RUN platform_convert -i utils/dockerfile_assets/google-cloud-sdk.repo --x86_64 --aarch64
 
-# Add google repo
-COPY utils/dockerfile_assets/google-cloud-sdk.repo /etc/yum.repos.d/
-RUN platform_convert -i /etc/yum.repos.d/google-cloud-sdk.repo --x86_64 --aarch64
-
-# Add hashicorp repo
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-
+# Add epel, google-cloud-sdk, hashicorp repos
 RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9 \
-      && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+      && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+      && yum-config-manager --add-repo utils/dockerfile_assets/google-cloud-sdk.repo \
+      && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo \
 
 # Install packages
 # These packages will end up in the final image
