@@ -18,6 +18,9 @@ COPY utils/dockerfile_assets/platforms.sh /usr/local/bin/platform_convert
 COPY utils/dockerfile_assets/google-cloud-sdk.repo /etc/yum.repos.d/
 RUN platform_convert -i /etc/yum.repos.d/google-cloud-sdk.repo --x86_64 --aarch64
 
+# Add hashicorp repo
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+
 RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9 \
       && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
@@ -32,7 +35,6 @@ RUN microdnf --assumeyes --nodocs install \
       fuse-overlayfs \
       git \
       golang \
-      google-cloud-cli \
       jq \
       make \
       nodejs \
@@ -49,6 +51,9 @@ RUN microdnf --assumeyes --nodocs install \
       vim-enhanced \
       wget \
       xz \
+      google-cloud-cli \
+      terraform \
+      packer \
       && microdnf clean all \
       && rm -rf /var/cache/yum
 
